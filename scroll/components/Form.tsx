@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import {WiStars} from 'react-icons/wi';
+import MagicText from './MagicText';
 
 import useLoginModal from '@/hooks/useLoginModal';
 import useRegisterModal from '@/hooks/useRegisterModal';
@@ -10,9 +12,6 @@ import usePost from '@/hooks/usePost';
 
 import Avatar from './Avatar';
 import Button from './Button';
-import MagicText from './MagicText';
-
-import { WiStars } from "react-icons/wi";
 
 interface FormProps {
   placeholder: string;
@@ -30,6 +29,17 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
   const [body, setBody] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const onSubmit = useCallback(async () => {
     try {
@@ -49,16 +59,6 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       setIsLoading(false);
     }
   }, [body, mutatePosts, isComment, postId, mutatePost]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="border-b-[1px] border-neutral-800 px-5 py-2">
@@ -94,13 +94,15 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                 h-[1px] 
                 w-full 
                 border-neutral-800 
-                transition"
+                transition
+                bg-emerald-600"
             />
             <div className="mt-4 flex flex-row justify-end">
-              <WiStars onClick={openModal} size={30} color='white'/>
+              <WiStars title="MagicText" className= 'hover:opacity-80 hover:rotate-90 cursor-pointer align-baseline ' onClick={openModal} size={30} color='white'/>
               <MagicText isOpen={isModalOpen} onClose={closeModal}/>
-              <Button disabled={isLoading || !body} onClick={onSubmit} label="Tweet" />
+              <Button disabled={isLoading || !body} onClick={onSubmit} label="Cast" />
             </div>
+
           </div>
         </div>
       ) : (
