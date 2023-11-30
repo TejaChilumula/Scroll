@@ -32,6 +32,9 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleMagicTextSubmission = (text: string) => {
+    setBody(text);
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -74,8 +77,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
               value={body}
               className="
                 disabled:opacity-80
-                peer
-                resize-none 
+                peer 
                 mt-3 
                 w-full 
                 bg-black 
@@ -84,6 +86,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                 text-[20px] 
                 placeholder-neutral-500 
                 text-white
+                max-h-max
               "
               placeholder={placeholder}>
             </textarea>
@@ -99,7 +102,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             />
             <div className="mt-4 flex flex-row justify-end">
               <WiStars title="MagicText" className= 'hover:opacity-80 hover:rotate-90 cursor-pointer align-baseline ' onClick={openModal} size={30} color='white'/>
-              <MagicText isOpen={isModalOpen} onClose={closeModal}/>
+              <MagicText isOpen={isModalOpen} onClose={closeModal} onSubmit={handleMagicTextSubmission}/>
               <Button disabled={isLoading || !body} onClick={onSubmit} label="Cast" />
             </div>
 
@@ -107,7 +110,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
         </div>
       ) : (
         <div className="py-8">
-          <h1 className="text-white text-2xl text-center mb-4 font-bold">Welcome to Twitter</h1>
+          <h1 className="text-white text-2xl text-center mb-4 font-bold">Hello from Scrolldown!</h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <Button label="Login" onClick={loginModal.onOpen} />
             <Button label="Register" onClick={registerModal.onOpen} secondary />

@@ -1,6 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import { IoMdClose } from "react-icons/io";
+import { FaCopy } from "react-icons/fa";
+import { BiSend } from "react-icons/bi";
+import { TfiLineDotted } from "react-icons/tfi";
 //import styles from './MagicText.module.css';
 /*
 interface MagicTextprops {
@@ -150,9 +154,10 @@ export default MagicText;
 interface MagicTextProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (text: string) => void;
 }
 
-const MagicText: React.FC<MagicTextProps> = ({ isOpen, onClose }) => {
+const MagicText: React.FC<MagicTextProps> = ({ isOpen, onClose, onSubmit }) => {
 
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
@@ -183,6 +188,8 @@ const MagicText: React.FC<MagicTextProps> = ({ isOpen, onClose }) => {
       content = dataa.response.content;
 
       setResponse(dataa.response.content);
+
+      onSubmit(response);
       
 
       console.log("GPT working", res.data);
@@ -195,20 +202,33 @@ const MagicText: React.FC<MagicTextProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleCopyText = () => {
+    navigator.clipboard.writeText(response);
+    onSubmit(response);
+    onClose();
+  };
+
+  const close = () => {
+    onClose();
+    setResponse("");
+  };
+
+
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 modal-overlay">
-          <div className="bg-white p-8 max-w-md w-full rounded-lg relative">
+        <div className="fixed
+                        inset-0 
+                        z-50 
+                        flex items-center justify-center bg-black bg-opacity-50 modal-overlay
+                        ">
+                          <br/>
+          <hr/>
+          <div className="bg-white p-8 h-250 max-w-xl w-full rounded-lg relative">
             <form onSubmit={handleSubmit}>
               {/* Your other elements */}
-              <div className="mb-4">
-                <input
-                  value={inputData}
-                  onChange={handleInputData}
-                  /* Rest of your input fields */
-                />
-              </div>
+              
+              {response != "" && (
               <div className="h-48 overflow-y-scroll mb-4">
               
               <textarea
@@ -219,15 +239,39 @@ const MagicText: React.FC<MagicTextProps> = ({ isOpen, onClose }) => {
                 
               ></textarea>
             </div>
+            )};
+
+            <div className="mb-4">
+                <input
+                  value={inputData}
+                  onChange={handleInputData}
+                  /* Rest of your input fields */
+                />
+              </div>
               <div className="flex justify-end">
+                
+                
+                <button
+                  className="px-4 py-2 bg-blue-500 mr-4 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:bg-orange-600"
+                  onClick={handleCopyText}
+                >
+                  <FaCopy/>
+                </button>
+
                 <button
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:bg-orange-600"
                   type="submit"
                 >
-                  {loading ? 'Loading...' : 'Submit'}
+                  {loading ? <TfiLineDotted/> : <BiSend />}
                 </button>
               </div>
             </form>
+            <button
+              className="absolute top-2 right-2 px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+              onClick={close}
+            >
+              <IoMdClose />
+            </button>
           </div>
         </div>
       )}

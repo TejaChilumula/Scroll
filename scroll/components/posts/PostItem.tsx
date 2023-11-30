@@ -57,7 +57,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   }, [data.createdAt])
 
 
-  const handleClick = async() => {
+  const handleClick = async(e : any) => {
+
+    e.stopPropagation()
+
     if (showTranslation) {
       setShowTranslation(false);
       setTranslatedContent('');
@@ -65,7 +68,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
       try {
         // Call your translation API here
         const translationRes =  await axios.post('/api/ask',  {
-          question: data.body + 'translate this to english' || ''
+          question: 'translate into english "'+data.body + '" , if not possible give '+ data.body + " as answer" || ''
         });
         setTranslatedContent(translationRes.data.response.content || '');
         setShowTranslation(true);
@@ -120,6 +123,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
           <div className="text-white mt-1">
           {showTranslation ? translatedContent : data.body}
           </div>
+          <div>
           <div className="flex flex-row items-center mt-3 gap-10">
             <div 
               className="
@@ -164,9 +168,10 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
               text-gray-300
               hover:underline
               gap-1"
-              ><p onClick={handleClick}>
+              ><p onClick={(e) => handleClick(e)}>
                 {showTranslation ? 'See Original' : 'See Translation'}</p>
               </div>
+          </div>
           </div>
         </div>
       </div>
